@@ -6,8 +6,8 @@ import com.sheepreak.towatch.views.Views;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name="User")
@@ -24,9 +24,14 @@ public class User implements Serializable {
 	@JsonView({Views.UserTurned.class, Views.CollectionTurned.class})
 	private String username;
 
-	@OneToMany(targetEntity = UserFilm.class, mappedBy = "film", cascade = CascadeType.ALL)
-	@JsonView(Views.UserTurned.class)
-	private List<UserFilm> films = new ArrayList<>();
+//	@ElementCollection(targetClass = UserFilm.class, fetch = FetchType.LAZY)
+//	@CollectionTable(name = "user_film", joinColumns = @JoinColumn(name = "user_id"))
+//	@OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@JsonView(Views.UserTurned.class)
+//	private List<UserFilm> films = new ArrayList<>();
+
+	@ElementCollection
+	private Map<Film, Watched> films = new HashMap<>();
 
 	public User() {
 	}
@@ -47,11 +52,11 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
-	public List<UserFilm> getFilms() {
+	public Map<Film, Watched> getFilms() {
 		return films;
 	}
 
-	public void setFilms(List<UserFilm> films) {
+	public void setFilms(Map<Film, Watched> films) {
 		this.films = films;
 	}
 
@@ -60,7 +65,4 @@ public class User implements Serializable {
 		return username;
 	}
 
-	public void add(UserFilm userFilm) {
-		films.add(userFilm);
-	}
 }

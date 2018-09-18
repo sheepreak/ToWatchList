@@ -1,14 +1,16 @@
 package com.sheepreak.towatch.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.sheepreak.towatch.models.Film;
 import com.sheepreak.towatch.models.User;
-import com.sheepreak.towatch.models.UserFilm;
+import com.sheepreak.towatch.models.Watched;
 import com.sheepreak.towatch.repositories.FilmRepository;
 import com.sheepreak.towatch.repositories.UserRepository;
 import com.sheepreak.towatch.views.Views;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class UserController {
@@ -46,24 +48,36 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @GetMapping("/user/films/{id}")
-    @JsonView(Views.CollectionTurned.class)
-    public List<UserFilm> getFilmsFromUserId(@PathVariable String id) {
-        return userRepository.findById(id).get().getFilms();
-    }
+//    @GetMapping("/user/films/{id}")
+//    @JsonView(Views.CollectionTurned.class)
+//    public List<UserFilm> getFilmsFromUserId(@PathVariable String id) {
+//        return userRepository.findById(id).get().getFilms();
+//    }
+
+//    @PostMapping("/user/{userName}/film/{filmName}")
+//    @JsonView(Views.UserTurned.class)
+//    public User addFilm(@PathVariable String userName, @PathVariable String filmName){
+//        User current = userRepository.findById(userName).orElse(null);
+//        UserFilm userFilm = new UserFilm();
+//
+//        userFilm.setFilm(filmRepository.findById(filmName).orElse(null));
+//        userFilm.setWatched(false);
+//        Objects.requireNonNull(current).add(userFilm);
+//        userFilm.setUser(current);
+//        System.out.println("------");
+//        current.getFilms().forEach(System.out::println);
+//        userRepository.save(current);
+//        return current;
+//    }
 
     @PostMapping("/user/{userName}/film/{filmName}")
     @JsonView(Views.UserTurned.class)
     public User addFilm(@PathVariable String userName, @PathVariable String filmName){
         User current = userRepository.findById(userName).orElse(null);
-        UserFilm userFilm = new UserFilm();
+        Film toAdd = filmRepository.findById(filmName).orElse(null);
 
-        userFilm.setFilm(filmRepository.findById(filmName).orElse(null));
-        userFilm.setWatched(false);
-        current.add(userFilm);
-        userFilm.setUser(current);
-        System.out.println("------");
-        current.getFilms().forEach(System.out::println);
+        Objects.requireNonNull(current).getFilms().put(toAdd, new Watched(false));
+
         return userRepository.save(current);
     }
 
