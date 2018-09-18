@@ -24,7 +24,7 @@ public class User implements Serializable {
 	@JsonView({Views.UserTurned.class, Views.CollectionTurned.class})
 	private String username;
 
-	@OneToMany(targetEntity = UserFilm.class, mappedBy = "film", cascade = CascadeType.ALL)
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JsonView(Views.UserTurned.class)
 	private List<UserFilm> films = new ArrayList<>();
 
