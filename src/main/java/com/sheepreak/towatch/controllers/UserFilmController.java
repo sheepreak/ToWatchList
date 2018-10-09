@@ -7,6 +7,7 @@ import com.sheepreak.towatch.repositories.FilmRepository;
 import com.sheepreak.towatch.repositories.UserFilmRepository;
 import com.sheepreak.towatch.repositories.UserRepository;
 import com.sheepreak.towatch.views.Views;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class UserFilmController {
 
     @PostMapping("/watched/{user}/{film}")
     @JsonView(Views.UserTurned.class)
+    @PreAuthorize("hasRole('USER')")
     public User updateWatch(@PathVariable String user, @PathVariable String film) {
         Optional<User> current = userRepository.findById(user);
         UserFilm userFilm = userFilmRepository.findByFilmAndUser(filmRepository.findById(film), current);
@@ -38,6 +40,7 @@ public class UserFilmController {
 
     @GetMapping("/userfilms")
     @JsonView(Views.CollectionTurned.class)
+    @PreAuthorize("hasRole('USER')")
     public List<UserFilm> getAllInteractions() {
         return userFilmRepository.findAll();
     }
