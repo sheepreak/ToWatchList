@@ -4,10 +4,13 @@ import com.sheepreak.towatch.models.Film;
 import com.sheepreak.towatch.models.User;
 import com.sheepreak.towatch.repositories.FilmRepository;
 import com.sheepreak.towatch.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.stream.Stream;
 
@@ -30,6 +33,8 @@ public class TowatchApplication {
 			Stream.of("Sheepreak", "Sypherin").forEach(name -> {
 				User user = new User();
 				user.setUsername(name);
+				user.setPassword(new BCryptPasswordEncoder().encode("password"));
+				user.setRole("ADMIN");
 				userRepository.save(user);
 			});
 			filmRepository.findAll().forEach(System.out::println);
