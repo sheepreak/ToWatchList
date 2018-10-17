@@ -24,6 +24,11 @@ public class User implements Serializable {
 	@JsonView({Views.UserTurned.class, Views.CollectionTurned.class})
 	private String username;
 
+	@NotNull
+	@Column(name = "password")
+	@JsonView({Views.UserTurned.class, Views.CollectionTurned.class})
+	private String password;
+
 	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JsonView(Views.UserTurned.class)
 	private List<UserFilm> films = new ArrayList<>();
@@ -55,7 +60,15 @@ public class User implements Serializable {
 		this.films = films;
 	}
 
-	@Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
 	public String toString() {
 		return username;
 	}
