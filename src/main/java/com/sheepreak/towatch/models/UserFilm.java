@@ -1,5 +1,6 @@
 package com.sheepreak.towatch.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.sheepreak.towatch.views.Views;
 
@@ -20,6 +21,7 @@ public class UserFilm implements Serializable {
     @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonView(Views.CollectionTurned.class)
+    @JsonBackReference
     private User user;
 
     @ManyToOne(targetEntity = Film.class, cascade = CascadeType.ALL)

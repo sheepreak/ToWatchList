@@ -1,5 +1,6 @@
 package com.sheepreak.towatch.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.sheepreak.towatch.views.Views;
 
@@ -31,6 +32,7 @@ public class User implements Serializable {
 
 	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JsonView(Views.UserTurned.class)
+    @JsonManagedReference
 	private List<UserFilm> films = new ArrayList<>();
 
 	public User() {
