@@ -6,39 +6,47 @@ import com.sheepreak.towatch.models.UserFilm;
 import com.sheepreak.towatch.repositories.FilmRepository;
 import com.sheepreak.towatch.repositories.UserFilmRepository;
 import com.sheepreak.towatch.repositories.UserRepository;
+import com.sheepreak.towatch.services.UserFilmService;
 import com.sheepreak.towatch.views.Views;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserFilmController {
 
-    private final UserFilmRepository userFilmRepository;
-    private final FilmRepository filmRepository;
-    private final UserRepository userRepository;
+    @Autowired
+    UserFilmService userFilmService;
 
-    public UserFilmController(UserFilmRepository userFilmRepository, FilmRepository filmRepository, UserRepository userRepository) {
-        this.userFilmRepository = userFilmRepository;
-        this.filmRepository = filmRepository;
-        this.userRepository = userRepository;
+    @PostMapping("/watch")
+    @JsonView(Views.UserTurned.class)
+    public ResponseEntity<User> watch(@RequestBody Map<String, String> json) {
+        try {
+            return new ResponseEntity<>(userFilmService.updateWatch(json.get("userid"), json.get("filmid"), true), HttpStatus.OK);
+        } catch (NullPointerException npe) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PostMapping("/watched/{user}/{film}")
+    @PostMapping("/unwatch")
     @JsonView(Views.UserTurned.class)
-    public User updateWatch(@PathVariable String user, @PathVariable String film) {
-        Optional<User> current = userRepository.findById(user);
-        UserFilm userFilm = userFilmRepository.findByFilmAndUser(filmRepository.findById(film), current);
-        userFilm.setWatched(true);
-        userFilmRepository.save(userFilm);
-        return current.orElse(null);
+    public ResponseEntity<User> unwatch(@RequestBody Map<String, String> json) {
+        try {
+            return new ResponseEntity<>(userFilmService.updateWatch(json.get("userid"), json.get("filmid"), false), HttpStatus.OK);
+        } catch (NullPointerException npe) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/userfilms")
     @JsonView(Views.CollectionTurned.class)
-    public List<UserFilm> getAllInteractions() {
-        return userFilmRepository.findAll();
+    public ResponseEntity<List<UserFilm>> getAllInteractions() {
+        return new ResponseEntity<>(userFilmService.findAll(), HttpStatus.OK);
     }
 }

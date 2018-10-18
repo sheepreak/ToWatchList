@@ -15,6 +15,6 @@ import java.util.Optional;
 @Transactional
 @CrossOrigin(origins = "http://localhost:4200")
 public interface UserFilmRepository extends CrudRepository<UserFilm, String> {
-    UserFilm findByFilmAndUser(Optional<Film> film, Optional<User> user);
+    Optional<UserFilm> findByFilmAndUser(Film film, User user);
     List<UserFilm> findAll();
 }
