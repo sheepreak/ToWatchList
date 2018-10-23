@@ -24,28 +24,28 @@ public class TowatchApplication {
 		SpringApplication.run(TowatchApplication.class, args);
 	}
 
-	@Bean
-	ApplicationRunner init(FilmRepository filmRepository, UserRepository userRepository, UserFilmRepository userFilmRepository) {
-		return args -> {
-			Stream.of("Titanic", "Star Wars", "Alien", "Jurassic Park", "Back to the future",
-					"Gremlins", "Dr Strange", "Justice League", "Avengers").forEach(name -> {
-				Film film = new Film();
-				film.setName(name);
-				filmRepository.save(film);
-			});
-			Film film = new Film();
-			film.setName("Le soldat rose");
-			filmRepository.save(film);
-			Stream.of("Sheepreak", "Sypherin").forEach(name -> {
-				User user = new User();
-				user.setUsername(name);
-				user.setPassword(bCryptPasswordEncoder.encode("password"));
-				userRepository.save(user);
-			});
-			filmRepository.findAll().forEach(System.out::println);
-			userRepository.findAll().forEach(System.out::println);
-		};
-	}
+//	@Bean
+//	ApplicationRunner init(FilmRepository filmRepository, UserRepository userRepository, UserFilmRepository userFilmRepository) {
+//		return args -> {
+//			Stream.of("Titanic", "Star Wars", "Alien", "Jurassic Park", "Back to the future",
+//					"Gremlins", "Dr Strange", "Justice League", "Avengers").forEach(name -> {
+//				Film film = new Film();
+//				film.setName(name);
+//				filmRepository.save(film);
+//			});
+//			Film film = new Film();
+//			film.setName("Le soldat rose");
+//			filmRepository.save(film);
+//			Stream.of("Sheepreak", "Sypherin").forEach(name -> {
+//				User user = new User();
+//				user.setUsername(name);
+//				user.setPassword(bCryptPasswordEncoder.encode("password"));
+//				userRepository.save(user);
+//			});
+//			filmRepository.findAll().forEach(System.out::println);
+//			userRepository.findAll().forEach(System.out::println);
+//		};
+//	}
 
 	@Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {

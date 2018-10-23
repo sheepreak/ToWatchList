@@ -57,4 +57,16 @@ public class UserFilmController {
     public ResponseEntity<List<UserFilm>> getAllNotWatchedByUser(@PathVariable String userid) {
         return ResponseEntity.ok(userFilmService.findByWatched(userid, false));
     }
+
+    @GetMapping("/countsubs/{filmid}")
+    @JsonView(Views.CollectionTurned.class)
+    public ResponseEntity countSubsForFilm(@PathVariable String filmid) {
+        return ResponseEntity.ok(userFilmService.countSubs(filmid));
+    }
+
+    @GetMapping("/countwatched/{filmid}")
+    @JsonView(Views.CollectionTurned.class)
+    public ResponseEntity countWatchedForFilm(@PathVariable String filmid) {
+        return ResponseEntity.ok(userFilmService.countWatched(filmid));
+    }
 }

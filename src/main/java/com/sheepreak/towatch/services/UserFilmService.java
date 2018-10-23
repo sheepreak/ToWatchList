@@ -38,4 +38,12 @@ public class UserFilmService {
     public List<UserFilm> findByWatched(String userId, boolean watched) {
         return userFilmRepository.findAll().stream().filter(u -> (u.isWatched() == watched && u.getUser().getId().equals(userId))).collect(Collectors.toList());
     }
+
+    public long countSubs(String filmId) {
+        return userFilmRepository.findAll().stream().filter(userFilm -> userFilm.getFilm().getId().equals(filmId)).count();
+    }
+
+    public long countWatched(String filmId) {
+        return userFilmRepository.findAll().stream().filter(userFilm -> userFilm.getFilm().getId().equals(filmId) && userFilm.isWatched()).count();
+    }
 }
