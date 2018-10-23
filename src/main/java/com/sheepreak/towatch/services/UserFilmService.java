@@ -7,10 +7,9 @@ import com.sheepreak.towatch.repositories.UserFilmRepository;
 import com.sheepreak.towatch.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserFilmService {
@@ -34,5 +33,9 @@ public class UserFilmService {
 
     public List<UserFilm> findAll() {
         return userFilmRepository.findAll();
+    }
+
+    public List<UserFilm> findByWatched(String userId, boolean watched) {
+        return userFilmRepository.findAll().stream().filter(u -> (u.isWatched() == watched && u.getUser().getId().equals(userId))).collect(Collectors.toList());
     }
 }

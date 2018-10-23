@@ -6,15 +6,10 @@ import com.sheepreak.towatch.models.UserFilm;
 import com.sheepreak.towatch.repositories.FilmRepository;
 import com.sheepreak.towatch.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserService {

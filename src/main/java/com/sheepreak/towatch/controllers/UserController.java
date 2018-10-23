@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.sheepreak.towatch.models.Credentials;
 import com.sheepreak.towatch.models.User;
 import com.sheepreak.towatch.models.UserFilm;
-import com.sheepreak.towatch.repositories.FilmRepository;
-import com.sheepreak.towatch.repositories.UserRepository;
 import com.sheepreak.towatch.services.UserService;
 import com.sheepreak.towatch.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,15 +23,15 @@ public class UserController {
 
     @GetMapping("/users")
     @JsonView(Views.UserTurned.class)
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/user/{id}")
     @JsonView(Views.UserTurned.class)
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         try {
-            return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+            return ResponseEntity.ok(userService.getUserById(id));
         } catch (NullPointerException npe) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -44,7 +41,7 @@ public class UserController {
     @JsonView(Views.UserTurned.class)
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         try {
-            return new ResponseEntity<>(userService.getUserByUsername(username),HttpStatus.OK);
+            return ResponseEntity.ok(userService.getUserByUsername(username));
         } catch (NullPointerException npe) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -60,7 +57,7 @@ public class UserController {
     @JsonView(Views.CollectionTurned.class)
     public ResponseEntity<List<UserFilm>> getFilmsFromUserId(@PathVariable String id) {
         try {
-            return new ResponseEntity<>(userService.getFilmsFromUserId(id),HttpStatus.OK);
+            return ResponseEntity.ok(userService.getFilmsFromUserId(id));
         } catch (NullPointerException npe) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -70,7 +67,7 @@ public class UserController {
     @JsonView(Views.UserTurned.class)
     public ResponseEntity<User> addFilm(@RequestBody Map<String, String> json){
         try {
-            return new ResponseEntity<>(userService.subscribe(json.get("userid"), json.get("filmid")), HttpStatus.OK);
+            return ResponseEntity.ok(userService.subscribe(json.get("userid"), json.get("filmid")));
         } catch(NullPointerException npe) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -80,7 +77,7 @@ public class UserController {
     @JsonView(Views.UserTurned.class)
     public ResponseEntity<User> login(@RequestBody Credentials credentials) {
         try {
-            return new ResponseEntity<>(userService.login(credentials),HttpStatus.OK);
+            return ResponseEntity.ok(userService.login(credentials));
         } catch (NullPointerException npe) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException iae) {

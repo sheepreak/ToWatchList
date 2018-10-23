@@ -1,7 +1,6 @@
 package com.sheepreak.towatch.controllers;
 
 import com.sheepreak.towatch.models.Film;
-import com.sheepreak.towatch.repositories.FilmRepository;
 import com.sheepreak.towatch.services.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,13 @@ public class FilmController {
 
     @GetMapping("/films")
     public ResponseEntity<List<Film>> getAllFilms() {
-        return new ResponseEntity<>(filmService.getAllFilms(), HttpStatus.OK);
+        return ResponseEntity.ok(filmService.getAllFilms());
     }
 
     @GetMapping("/film/{id}")
     public ResponseEntity<Film> getFilmById(@PathVariable String id) {
         try {
-            return new ResponseEntity<>(filmService.getFilmById(id),HttpStatus.OK);
+            return ResponseEntity.ok(filmService.getFilmById(id));
         } catch (NullPointerException npe) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
